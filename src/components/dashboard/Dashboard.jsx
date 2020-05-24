@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import Display from '../design/Display'
 import Setting from '../design/Setting'
-import ImageUpload from '../design/ImageUpload'
+import {storage} from '../config/firebaseConfig'
 
 class Dashboard extends Component {
     state = {
         tshirtImage : 'https://res.cloudinary.com/dieyzzi8d/image/upload/v1590212189/mintbluetfront_ld4aqi.jpg',
         upperText : "This is upper text",
         lowerText : 'This is lower text',
-        file : '',
         uploadImage : "http://via.placeholder.com/400x300",
         textSize : '30',
         textColor : "black"
@@ -38,22 +37,28 @@ class Dashboard extends Component {
             textSize : e.target.value
         })
     }
-    handleSubmit = e =>{
-        e.preventDefault();
-    }
     handleUploadImage = (e)=>{
-        // e.preventDefault();
-
-        // let reader = new FileReader();
-        let file = e.target.files[0];
-        console.log(file);
-        // reader.onloadend = () => {
-        //     this.setState({
-        //       file: file,
-        //       uploadImage: reader.result
-        //     });
-        //   }
-        // reader.readAsDataURL(file)    
+        if(e.target.files[0]){
+            const image = (e.target.files[0]);
+            const uploadTask = storage.ref(`images/${image.name}`).put(image);
+            uploadTask.on(`state_changed`,
+            (snapshot)=>{
+                console.log(snapshot);
+            },
+            (err) =>{
+                console.log('this is err line')
+                console.log(err);
+            },
+            ()=>{
+                storage.ref('image').child(image.name).getDownloadURL().then(url=>{
+                    console.log(url);
+                    this.setState({
+                        uploadImage : url
+                    });
+                })
+            }
+            )
+        }
     }
     render() {
         return (
@@ -69,13 +74,10 @@ class Dashboard extends Component {
                         lowerText={this.handleLowerText}
                         textColor={this.handleTextColor}
                         textSize={this.handleTextSize}
-                        submit = {this.handleSubmit}
+                        uploadImage = {this.handleUploadImage}
                         />
                     </div>
                 </div>  
-                <div className='container'>
-                    <ImageUpload/>
-                </div>
             </div>
         )
     }

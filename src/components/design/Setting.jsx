@@ -14,8 +14,7 @@ function Setting({
   lowerText,
   textColor,
   textSize,
-  uploadImage,
-  submit
+  uploadImage
 }) {
   return (
     <div className="card bg-light container py-2">
@@ -32,33 +31,20 @@ function Setting({
       <h5>Upload Image</h5>
       <div className="row">
         <form>
-          <div className="col-md-8">
-            <div className="form-group">
-              <input
-                type="file"
-                className="form-control-file"
-                id="exampleInputFile"
-                aria-describedby="fileHelp"
-                onChange={uploadImage}
-              />
-            </div>
+          <div className="col-8">
+            <input type="file" onChange={uploadImage} />
           </div>
-          <div className="col-md-4">
-            <div className="progress rounded">
-              <div
-                className="progress-bar progress-bar-striped progress-bar-animated rounded"
-                role="progressbar"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                style={{ width: "35%" }}
-              ></div>
-            </div>
-            <button type="submit" className="btn btn-info btn-md rounded mt-3" onSubmit={submit}>
+          <div className="col-4">
+            <button
+              type="btn"
+              className="btn btn-info rounded my-2"
+            >
               Upload
             </button>
           </div>
         </form>
       </div>
+      
       <hr style={{ border: "1px solid #ccc" }} />
       <div className="writeText">
         <h5>Write Text</h5>
